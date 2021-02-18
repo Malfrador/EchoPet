@@ -36,7 +36,6 @@ import com.dsh105.echopet.compat.api.entity.type.pet.ILlamaPet;
 import com.dsh105.echopet.compat.api.entity.type.pet.IMagmaCubePet;
 import com.dsh105.echopet.compat.api.entity.type.pet.IParrotPet;
 import com.dsh105.echopet.compat.api.entity.type.pet.IPigPet;
-import com.dsh105.echopet.compat.api.entity.type.pet.IPigZombiePet;
 import com.dsh105.echopet.compat.api.entity.type.pet.ISheepPet;
 import com.dsh105.echopet.compat.api.entity.type.pet.IShulkerPet;
 import com.dsh105.echopet.compat.api.entity.type.pet.ISlimePet;
@@ -220,9 +219,6 @@ public class PetUtil{
 		}
 		if(pt.getPetType() == PetType.ZOMBIE){
 			info.add(ChatColor.GOLD + " - Baby: " + ChatColor.YELLOW + ((IZombiePet) pt).isBaby());
-		}
-		if(pt.getPetType() == PetType.PIGZOMBIE){
-			info.add(ChatColor.GOLD + " - Baby: " + ChatColor.YELLOW + ((IPigZombiePet) pt).isBaby());
 		}
 		info.addAll(generatePetDataInfo(pt));
 		

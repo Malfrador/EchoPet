@@ -171,8 +171,6 @@ permissions:
         default: op
     echopet.pet.type.pig:
         default: op
-    echopet.pet.type.pigzombie:
-        default: op
     echopet.pet.type.pillager:
         default: op
     echopet.pet.type.polarbear:

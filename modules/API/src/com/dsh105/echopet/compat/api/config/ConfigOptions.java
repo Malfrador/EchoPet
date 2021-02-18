@@ -33,7 +33,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 
 
-public class ConfigOptions extends Options{
+public class ConfigOptions extends Options {
 	
 	public static ConfigOptions instance;
 	

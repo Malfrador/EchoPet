@@ -17,7 +17,6 @@
 
 package com.dsh105.echopet.listeners;
 
-import com.dsh105.commodus.StringUtil;
 import com.dsh105.echopet.compat.api.entity.IPet;
 import com.dsh105.echopet.compat.api.entity.PetData;
 import com.dsh105.echopet.compat.api.entity.PetDataCategory;
@@ -28,6 +27,7 @@ import com.dsh105.echopet.compat.api.util.MenuUtil;
 import com.dsh105.echopet.compat.api.util.menu.DataMenu;
 import com.dsh105.echopet.compat.api.util.menu.PetMenu;
 import com.dsh105.echopet.compat.api.util.menu.SelectorLayout;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -111,7 +111,7 @@ public class MenuListener implements Listener{
 					if(title.contains(" - ")){
 						String[] split = title.split(" - ");
 						for(PetDataCategory cat : PetDataCategory.values){
-							if(split[split.length - 1].equals(StringUtil.capitalise(cat.toString().replace("_", " ")))){
+							if(split[split.length - 1].equals(StringUtils.capitalise(cat.toString().replace("_", " ")))){
 								category = cat;
 								break;
 							}
