@@ -34,14 +34,18 @@ import com.dsh105.echopet.compat.api.ai.APetGoalFollowOwner;
 import com.dsh105.echopet.compat.api.ai.PetGoalType;
 import com.dsh105.echopet.compat.api.event.PetMoveEvent;
 import com.dsh105.echopet.compat.api.plugin.EchoPet;
+import com.dsh105.echopet.compat.api.util.ReflectionUtils;
 import com.dsh105.echopet.compat.nms.v1_16_R3.entity.EntityPet;
 import com.dsh105.echopet.compat.nms.v1_16_R3.entity.type.EntityGhastPet;
 import com.dsh105.echopet.compat.nms.v1_16_R3.entity.type.EntityVexPet;
-import net.minecraft.server.v1_16_R3.EntityPlayer;
-import net.minecraft.server.v1_16_R3.GenericAttributes;
-import net.minecraft.server.v1_16_R3.Navigation;
-import net.minecraft.server.v1_16_R3.PathEntity;
+import com.google.common.collect.ImmutableSet;
+import net.minecraft.server.v1_16_R3.*;
+import org.bukkit.Bukkit;
+import org.bukkit.craftbukkit.v1_16_R3.entity.CraftMob;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Mob;
 
 public class PetGoalFollowOwner extends APetGoalFollowOwner{
 	
@@ -126,6 +130,7 @@ public class PetGoalFollowOwner extends APetGoalFollowOwner{
 			}*/
 			double speed = 0.6F;
 			if(/*!(this.pet instanceof EntityEnderDragonPet) && */this.pet.h(owner) > (this.teleportDistance) && ((CraftPlayer) this.pet.getPlayerOwner()).getHandle().isOnGround() || this.pet.getPlayerOwner().isInsideVehicle()){
+				// This works in 1.16
 				this.pet.getPet().teleportToOwner();
 				return;
 			}
@@ -140,10 +145,17 @@ public class PetGoalFollowOwner extends APetGoalFollowOwner{
 				if(pet instanceof EntityGhastPet || pet instanceof EntityVexPet){
 					path = pet.getNavigation().a(pet.getPlayerOwner().getLocation().getBlockX(), pet.getPlayerOwner().getLocation().getBlockY() + 5, pet.getPlayerOwner().getLocation().getBlockZ(), followDistance);
 				}else{
+					// This returns always null
+					pet.setOnGround(true);
 					path = pet.getNavigation().a(owner, followDistance);
+					if (path != null) {
+						Bukkit.getLogger().info("Found path: " + path.toString());
+					}
+
 				}
 				// Smooth path finding to entity instead of location
-				pet.getNavigation().a(path, speed);
+				boolean result = pet.getNavigation().a(path, speed);
+				Bukkit.getLogger().info("Result " + result);
 			}
 		}
 	}

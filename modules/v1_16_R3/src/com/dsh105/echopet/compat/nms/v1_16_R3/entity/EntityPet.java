@@ -75,10 +75,11 @@ import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-public abstract class EntityPet extends EntityInsentient implements IEntityPet{
+public abstract class EntityPet extends EntityInsentient implements IEntityPet {
 	
 	protected IPet pet;
 	public PetGoalSelector petGoalSelector;
@@ -279,8 +280,8 @@ public abstract class EntityPet extends EntityInsentient implements IEntityPet{
 	// well then...it's now 'final'
 	/*
 	// Overriden from EntityInsentient - Most importantly overrides pathfinding selectors
-	
-	protected final void doTick() {
+
+	public void doTick() {
 	    super.doTick();
 	    ++this.ticksFarFromPlayer;
 	
@@ -304,8 +305,8 @@ public abstract class EntityPet extends EntityInsentient implements IEntityPet{
 	    this.getControllerLook().a();
 	
 	    this.getControllerJump().b();
-	}
-	*/
+	}*/
+
 	public boolean onInteract(Player p){
 		if(p.getUniqueId().equals(getPlayerOwner().getUniqueId())){
 			// if (IdentUtil.areIdentical(p, getPlayerOwner())) {
@@ -406,7 +407,7 @@ public abstract class EntityPet extends EntityInsentient implements IEntityPet{
 	//Tbh just look at EntityHorseAbstract.
 	public void g(Vec3D motion){
 		if(passengers.isEmpty()){
-			this.h(0.5F);// Above noclip
+			this.G = 0.5F;// maxUpStep
 			this.aM = 0.02F;// above killer in entity living
 			super.e(motion);
 			return;
@@ -425,13 +426,13 @@ public abstract class EntityPet extends EntityInsentient implements IEntityPet{
 		this.setYawPitch(this.yaw, this.pitch);
 		this.aK = this.aM = this.yaw;
 		
-		double motX = ((EntityHuman) passenger).az * 0.5;
+		double motX = ((EntityHuman) passenger).aR * 0.5;
 		double motY = motion.y;
-		double motZ = ((EntityHuman) passenger).bb();
+		double motZ = ((EntityHuman) passenger).aT;
 		if(motZ <= 0){
 			motZ *= 0.25F;
 		}
-		this.aM = dN() * 0.1F;
+		this.aM = dN() * 0.1F; // flyingSpeed
 		PetRideMoveEvent moveEvent = new PetRideMoveEvent(this.getPet(), (float) motX, (float) motZ);// side, forward
 		EchoPet.getPlugin().getServer().getPluginManager().callEvent(moveEvent);
 		if(moveEvent.isCancelled()) return;
