@@ -47,11 +47,11 @@ import org.bukkit.entity.Player;
  */
 @SuppressWarnings("unchecked")
 public class PetRegistry implements IPetRegistry{
-	
+
 	private final Map<PetType, PetRegistrationEntry> registrationEntries = new HashMap<>();
-	
+
 	public PetRegistry(){
-		for(PetType petType : PetType.values()){
+		for(PetType petType : PetType.values){
 			if(petType.isCompatible()){
 				try{
 					PetRegistrationEntry registrationEntry = PetRegistrationEntry.create(petType);
@@ -62,15 +62,15 @@ public class PetRegistry implements IPetRegistry{
 			}
 		}
 	}
-	
+
 	public PetRegistrationEntry getRegistrationEntry(PetType petType){
 		return registrationEntries.get(petType);
 	}
-	
+
 	public void shutdown(){
 		registrationEntries.clear();
 	}
-	
+
 	public IPet spawn(PetType petType, final Player owner){
 		Preconditions.checkNotNull(petType, "Pet type must not be null.");
 		Preconditions.checkNotNull(owner, "Owner type must not be null.");
@@ -80,13 +80,13 @@ public class PetRegistry implements IPetRegistry{
 			return null;
 		}
 		return performRegistration(registrationEntry, new Callable<IPet>(){
-			
+
 			public IPet call() throws Exception{
 				return registrationEntry.createFor(owner);
 			}
 		});
 	}
-	
+
 	public <T> T performRegistration(PetRegistrationEntry registrationEntry, Callable<T> callable){
 		try{
 			return callable.call();
@@ -94,7 +94,7 @@ public class PetRegistry implements IPetRegistry{
 			throw new PetRegistrationException(e);
 		}
 	}
-	
+
 	@Override
 	public void enablePet(PetType petType){
 		/*if(petType.isCompatible()){
@@ -114,7 +114,7 @@ public class PetRegistry implements IPetRegistry{
 			IRegistry.a((IRegistry) IRegistry.ENTITY_TYPE, petType.getMinecraftName(), entitytypes_a.a(petType.getMinecraftName()));
 		}*/
 	}
-	
+
 	@Override
 	public void disablePet(PetType petType){
 		/*try{

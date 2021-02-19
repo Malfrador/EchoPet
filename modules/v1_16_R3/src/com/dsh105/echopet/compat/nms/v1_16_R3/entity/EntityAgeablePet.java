@@ -41,23 +41,23 @@ import net.minecraft.server.v1_16_R3.EntityTypes;
 import net.minecraft.server.v1_16_R3.World;
 
 public abstract class EntityAgeablePet extends EntityPet implements IEntityAgeablePet{
-	
+
 	private static final DataWatcherObject<Boolean> BABY = DataWatcher.a(EntityAgeablePet.class, DataWatcherRegistry.i);
 	protected int age;
 	private boolean ageLocked = true;
-	
+
 	public EntityAgeablePet(EntityTypes<? extends EntityInsentient> type, World world){
 		super(type, world);
 	}
-	
+
 	public EntityAgeablePet(EntityTypes<? extends EntityInsentient> type, World world, IPet pet){
 		super(type, world, pet);
 	}
-	
+
 	public int getAge(){
-		return this.datawatcher.get(BABY).booleanValue() ? -1 : this.age;
+		return this.datawatcher.get(BABY) ? -1 : this.age;
 	}
-	
+
 	public void setAge(int i, boolean flag){
 		int j = getAge();
 		j += i * 20;
@@ -66,30 +66,30 @@ public abstract class EntityAgeablePet extends EntityPet implements IEntityAgeab
 		}
 		setAgeRaw(j);
 	}
-	
+
 	public void setAge(int i){
 		setAge(i, false);
 	}
-	
+
 	public void setAgeRaw(int i){
-		this.datawatcher.set(BABY, Boolean.valueOf(i < 0));
+		this.datawatcher.set(BABY, i < 0);
 		this.age = i;
 	}
-	
+
 	public boolean isAgeLocked(){
 		return ageLocked;
 	}
-	
+
 	public void setAgeLocked(boolean ageLocked){
 		this.ageLocked = ageLocked;
 	}
-	
+
 	@Override
 	protected void initDatawatcher(){
 		super.initDatawatcher();
 		this.datawatcher.register(BABY, false);
 	}
-	
+
 	@Override
 	public void inactiveTick(){
 		super.inactiveTick();
@@ -104,16 +104,16 @@ public abstract class EntityAgeablePet extends EntityPet implements IEntityAgeab
 			}
 		}
 	}
-	
+
 	public void setBaby(boolean flag){
 		this.datawatcher.set(BABY, flag);
 	}
-	
+
 	@Override
 	public boolean isBaby(){
-		return this.datawatcher.get(BABY).booleanValue();
+		return this.datawatcher.get(BABY);
 	}
-	
+
 	@Override
 	public SizeCategory getSizeCategory(){
 		if(this.isBaby()){

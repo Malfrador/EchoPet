@@ -34,21 +34,17 @@ import com.dsh105.echopet.compat.api.ai.APetGoalFollowOwner;
 import com.dsh105.echopet.compat.api.ai.PetGoalType;
 import com.dsh105.echopet.compat.api.event.PetMoveEvent;
 import com.dsh105.echopet.compat.api.plugin.EchoPet;
-import com.dsh105.echopet.compat.api.util.ReflectionUtils;
 import com.dsh105.echopet.compat.nms.v1_16_R3.entity.EntityPet;
 import com.dsh105.echopet.compat.nms.v1_16_R3.entity.type.EntityGhastPet;
 import com.dsh105.echopet.compat.nms.v1_16_R3.entity.type.EntityVexPet;
-import com.google.common.collect.ImmutableSet;
-import net.minecraft.server.v1_16_R3.*;
-import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_16_R3.entity.CraftMob;
+import net.minecraft.server.v1_16_R3.EntityPlayer;
+import net.minecraft.server.v1_16_R3.GenericAttributes;
+import net.minecraft.server.v1_16_R3.Navigation;
+import net.minecraft.server.v1_16_R3.PathEntity;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Mob;
 
 public class PetGoalFollowOwner extends APetGoalFollowOwner{
-	
+
 	private EntityPet pet;
 	private Navigation nav;
 	private int timer = 0;
@@ -56,7 +52,7 @@ public class PetGoalFollowOwner extends APetGoalFollowOwner{
 	private double stopDistance;
 	private double teleportDistance;
 	// private EntityPlayer owner;
-	
+
 	public PetGoalFollowOwner(EntityPet pet, double startDistance, double stopDistance, double teleportDistance){
 		this.pet = pet;
 		this.nav = (Navigation) pet.getNavigation();
@@ -65,17 +61,17 @@ public class PetGoalFollowOwner extends APetGoalFollowOwner{
 		this.teleportDistance = teleportDistance;
 		// this.owner = ((CraftPlayer) pet.getPlayerOwner()).getHandle();
 	}
-	
+
 	@Override
 	public PetGoalType getType(){
 		return PetGoalType.THREE;
 	}
-	
+
 	@Override
 	public String getDefaultKey(){
 		return "FollowOwner";
 	}
-	
+
 	@Override
 	public boolean shouldStart(){
 		if(!this.pet.isAlive()){
@@ -90,7 +86,7 @@ public class PetGoalFollowOwner extends APetGoalFollowOwner{
 			return !(this.pet.getGoalTarget() != null && this.pet.getGoalTarget().isAlive());
 		}
 	}
-	
+
 	@Override
 	public boolean shouldContinue(){
 		if(this.nav.f()){// Navigation - bottom of class, just returns another method.
@@ -103,19 +99,19 @@ public class PetGoalFollowOwner extends APetGoalFollowOwner{
 		// PetGoalMeleeAttack attackGoal = (PetGoalMeleeAttack) this.pet.petGoalSelector.getGoal("Attack");
 		// return !(attackGoal != null && attackGoal.isActive);
 	}
-	
+
 	@Override
 	public void start(){
 		this.timer = 0;
 		// Set pathfinding radius
 		pet.getAttributeInstance(GenericAttributes.FOLLOW_RANGE).setValue(this.teleportDistance);
 	}
-	
+
 	@Override
 	public void finish(){
 		this.nav.n();// Navigation abstract - return this.c == null || this.c.b();
 	}
-	
+
 	@Override
 	public void tick(){
 		// PathfinderGoalFollowOwner
@@ -128,9 +124,8 @@ public class PetGoalFollowOwner extends APetGoalFollowOwner{
 			    //Don't move pet when owner flying
 			    return;
 			}*/
-			double speed = 0.6F;
+			double speed = 0.8F;
 			if(/*!(this.pet instanceof EntityEnderDragonPet) && */this.pet.h(owner) > (this.teleportDistance) && ((CraftPlayer) this.pet.getPlayerOwner()).getHandle().isOnGround() || this.pet.getPlayerOwner().isInsideVehicle()){
-				// This works in 1.16
 				this.pet.getPet().teleportToOwner();
 				return;
 			}
@@ -145,21 +140,14 @@ public class PetGoalFollowOwner extends APetGoalFollowOwner{
 				if(pet instanceof EntityGhastPet || pet instanceof EntityVexPet){
 					path = pet.getNavigation().a(pet.getPlayerOwner().getLocation().getBlockX(), pet.getPlayerOwner().getLocation().getBlockY() + 5, pet.getPlayerOwner().getLocation().getBlockZ(), followDistance);
 				}else{
-					// This returns always null
-					pet.setOnGround(true);
 					path = pet.getNavigation().a(owner, followDistance);
-					if (path != null) {
-						Bukkit.getLogger().info("Found path: " + path.toString());
-					}
-
 				}
 				// Smooth path finding to entity instead of location
-				boolean result = pet.getNavigation().a(path, speed);
-				Bukkit.getLogger().info("Result " + result);
+				pet.getNavigation().a(path, speed);
 			}
 		}
 	}
-	
+
 	public Navigation getNavigation(){
 		return nav;
 	}

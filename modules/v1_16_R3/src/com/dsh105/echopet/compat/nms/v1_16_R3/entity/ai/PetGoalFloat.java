@@ -36,30 +36,30 @@ import com.dsh105.echopet.compat.nms.v1_16_R3.entity.EntityPet;
 import net.minecraft.server.v1_16_R3.Navigation;
 
 public class PetGoalFloat extends APetGoalFloat{
-	
+
 	private EntityPet pet;
-	
+
 	public PetGoalFloat(EntityPet pet){
 		this.pet = pet;
 		((Navigation) pet.getNavigation()).c(true);
 	}
-	
+
 	@Override
 	public PetGoalType getType(){
 		return PetGoalType.FOUR;
 	}
-	
+
 	@Override
 	public String getDefaultKey(){
 		return "Float";
 	}
-	
+
 	@Override
 	public boolean shouldStart(){
-		// 1.9: return (this.a.isInWater()) || (this.a.an());
-		return this.pet.isInWater() || this.pet.aH();
+		// 1.16: return ((this.a.isInWater() && this.a.b(TagsFluid.WATER) > this.a.cw()) || this.a.aN());
+		return this.pet.isInWater() || this.pet.aQ();
 	}
-	
+
 	@Override
 	public void tick(){
 		if(this.pet.random().nextFloat() < 0.8F){

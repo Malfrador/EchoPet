@@ -41,6 +41,7 @@ import net.minecraft.server.v1_16_R3.NBTTagCompound;
 import net.minecraft.server.v1_16_R3.World;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack;
@@ -48,7 +49,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
 public class SpawnUtil implements ISpawnUtil{
-	
+
+	public static final NamespacedKey parrotKey = new NamespacedKey(EchoPet.getPlugin(), "parrot");
+
 	public IEntityPet spawn(IPet pet, Player owner){
 		Location l = owner.getLocation();
 		// if(EchoPet.getPlugin().getVanishProvider().isVanished(owner)) return null;
@@ -76,7 +79,7 @@ public class SpawnUtil implements ISpawnUtil{
 		EchoPet.getPetRegistry().disablePet(pet.getPetType());
 		return entityPet;
 	}
-	
+
 	@Override
 	// This is kind of a dumb way to do this.. But I'm too lazy to fix my reflection
 	public org.bukkit.inventory.ItemStack getSpawnEgg(org.bukkit.inventory.ItemStack i, String entityTag){

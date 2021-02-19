@@ -45,49 +45,49 @@ import net.minecraft.server.v1_16_R3.World;
  * @since Mar 6, 2016
  */
 public class EntityTameablePet extends EntityAgeablePet implements IEntityTameablePet{
-	
+
 	protected static final int Sitting = 0x1, Angry = 0x2, Tamed = 0x4;
 	protected static final DataWatcherObject<Byte> Flag = DataWatcher.a(EntityTameablePet.class, DataWatcherRegistry.a);
 	protected static final DataWatcherObject<Optional<UUID>> OWNER = DataWatcher.a(EntityTameablePet.class, DataWatcherRegistry.o);
-	
+
 	public EntityTameablePet(EntityTypes<? extends EntityInsentient> type, World world){
 		super(type, world);
 	}
-	
+
 	public EntityTameablePet(EntityTypes<? extends EntityInsentient> type, World world, IPet pet){
 		super(type, world, pet);
 	}
-	
+
 	protected void initDatawatcher(){
 		super.initDatawatcher();
 		this.datawatcher.register(Flag, (byte) 0);
 		this.datawatcher.register(OWNER, Optional.empty());
 	}
-	
+
 	public boolean isTamed(){
 		return (getFlag() & Tamed) != 0;
 	}
-	
+
 	@Override
 	public void setSitting(boolean sitting){
 		if(sitting) addFlag(Sitting);
 		else removeFlag(Sitting);
 	}
-	
+
 	@Override
 	public void setTamed(boolean tamed){
 		if(tamed) addFlag(Tamed);
 		else removeFlag(Tamed);
 	}
-	
+
 	protected void addFlag(int flag){
 		datawatcher.set(Flag, (byte) (getFlag() | flag));
 	}
-	
+
 	protected void removeFlag(int flag){
 		datawatcher.set(Flag, (byte) (getFlag() & ~flag));
 	}
-	
+
 	protected int getFlag(){
 		return datawatcher.get(Flag);
 	}
